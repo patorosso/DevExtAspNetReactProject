@@ -1,11 +1,10 @@
-using DevExtApp.Models;
+using DevExtAspNetReactProject.Models;
 using DevExtreme.AspNet.Data;
-using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
-namespace DevExtApp.Controllers
+namespace DevExtAspNetReactProject.Controllers
 {
 
     [Route("api/[controller]/[action]")]

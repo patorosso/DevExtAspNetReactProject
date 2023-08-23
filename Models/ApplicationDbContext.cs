@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
-namespace DevExtApp.Models
+namespace DevExtAspNetReactProject.Models
 {
 
     public class ApplicationDbContext : DbContext

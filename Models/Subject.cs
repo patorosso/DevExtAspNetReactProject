@@ -1,4 +1,4 @@
-﻿namespace DevExtApp.Models
+﻿namespace DevExtAspNetReactProject.Models
 {
     public class Subject
     {
