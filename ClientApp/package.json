@@ -4,6 +4,10 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^5.2.3",
+    "devextreme": "23.1.4",
+    "devextreme-aspnet-data": "^2.9.3",
+    "devextreme-aspnet-data-nojquery": "^2.9.3",
+    "devextreme-react": "23.1.4",
     "http-proxy-middleware": "^2.0.6",
     "jquery": "^3.6.3",
     "merge": "^2.1.1",
