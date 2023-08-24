@@ -4,9 +4,9 @@
     {
         public int Id { get; set; }
 
-        public string Description { get; set; }
+        public string Description { get; set; } = null!;
 
-        public Career Career { get; set; }
+        public Career Career { get; set; } = null!;
 
         public int CareerId { get; set; }
 

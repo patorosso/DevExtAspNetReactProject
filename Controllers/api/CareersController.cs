@@ -24,12 +24,17 @@ namespace DevExtAspNetReactProject.Controllers.api
 
 
         [HttpDelete]
-        public async Task Delete(int key)
+        public async Task<IActionResult> Delete(int key)
         {
-            var model = await _context.Careers.FirstOrDefaultAsync(item => item.Id == key);
+            Career? model = await _context.Careers.FirstOrDefaultAsync(item => item.Id == key);
+
+            if (model == null)
+                return NotFound();
+
 
             _context.Careers.Remove(model);
             await _context.SaveChangesAsync();
+            return NoContent();
         }
 
 

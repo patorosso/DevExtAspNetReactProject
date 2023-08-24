@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         public DateTime DateOfBirth { get; set; }
 
@@ -14,7 +14,7 @@
 
         public bool HasGraduated { get; set; }
 
-        public Career Career { get; set; }
+        public Career Career { get; set; } = null!;
 
         public int CareerId { get; set; }
 
