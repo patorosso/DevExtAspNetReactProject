@@ -10,14 +10,6 @@ import { endpoint, getParams } from "../utils/requestLogic";
 import { createStore } from "devextreme-aspnet-data-nojquery";
 import CustomStore from "devextreme/data/custom_store";
 
-const store1 = createStore({
-  key: "id",
-  loadUrl: endpoint + "/Students/GetStudents",
-  deleteUrl: endpoint + "/Students/DeleteStudent",
-  insertUrl: endpoint + "/Students/InsertStudent",
-  updateUrl: endpoint + "/Students/UpdateStudent",
-});
-
 const store = new CustomStore({
   key: "id",
   load: async (loadOptions) => {
@@ -26,7 +18,7 @@ const store = new CustomStore({
         `${endpoint}/Students/GetStudents${getParams(loadOptions)}`
       );
 
-      if (response.status != 200 && response.status != 204)
+      if (response.status !== 200 && response.status !== 204)
         throw new Error(
           `Error. Server responded with status: ${response.status}`
         );
@@ -51,7 +43,7 @@ const store = new CustomStore({
         },
         body: JSON.stringify(values),
       });
-      if (response.status != 200 && response.status != 204)
+      if (response.status !== 200 && response.status !== 204)
         throw new Error(`Server responded with status: ${response.status}`);
     } catch (error) {
       console.error(error);
@@ -59,16 +51,29 @@ const store = new CustomStore({
   },
   update: async (key, values) => {
     try {
+      const patchOperations = [];
+
+      for (const field in values) {
+        if (values.hasOwnProperty(field)) {
+          patchOperations.push({
+            op: "replace",
+            path: `/${field}`,
+            value: values[field],
+          });
+        }
+      }
+
       const response = await fetch(
         `${endpoint}/Students/UpdateStudent/${key}`,
         {
-          method: "PATCH", //PUT
+          method: "PATCH",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json-patch+json",
           },
-          body: JSON.stringify(values),
+          body: JSON.stringify(patchOperations),
         }
       );
+
       if (response.status !== 200 && response.status !== 204) {
         throw new Error(`Server responded with status: ${response.status}`);
       }
@@ -87,7 +92,7 @@ const store = new CustomStore({
           },
         }
       );
-      if (response.status != 200 && response.status != 204)
+      if (response.status !== 200 && response.status !== 204)
         throw new Error(`Server responded with status: ${response.status}`);
     } catch (error) {
       console.error(error);

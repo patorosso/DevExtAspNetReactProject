@@ -56,12 +56,13 @@ namespace DevExtAspNetReactProject.Controllers.api
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateStudent(int id, [FromBody] JsonPatchDocument<Student> patchDoc)
         {
+            Console.WriteLine("Received request body: " + Request.Body);
             var studentInDb = await _context.Students.FirstOrDefaultAsync(c => c.Id == id);
 
             if (studentInDb == null)
                 return NotFound();
 
-            //patchDoc.ApplyTo(studentInDb, );
+            patchDoc.ApplyTo(studentInDb, ModelState); //dotnet add package Microsoft.AspNetCore.Mvc.NewtonsoftJson
 
             if (!ModelState.IsValid)
             {

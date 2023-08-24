@@ -11,6 +11,8 @@ export function getParams(loadOptions) {
     "take",
     "sort",
     "filter",
+    "requireTotalCount",
+    "requireGroupCount",
     "totalSummary",
     "group",
     "groupSummary",
