@@ -5,8 +5,8 @@ delete from Careers where Id = 9
 select * from  Careers
 
 update Careers
-set ParentCareerId = 6
-where Id != 6
+set ParentCareerId = 11
+where Id = 12
 
 select * from Careers
 
@@ -17,6 +17,23 @@ insert into Careers values ('Ingeniería Industrial',1)
 delete from AttendanceRecords
 
 select * from Students
+
+--Historic
+select Title, count(Title) as Quantity
+from Careers as c
+join Students as s on s.CareerId = c.Id
+group by Title
+
+--Current
+select Title, count(Title) as Quantity
+from Careers as c
+join Students as s on s.CareerId = c.Id
+where s.IsActive = 1
+group by Title
+
+
+
+
 
 insert into CareerAreas values ('Ingeniería')
 
@@ -32,6 +49,7 @@ VALUES
     ('Javier Rodríguez', '1996-04-04', '2016-08-16', 1, 1, 5),
     ('Emiliano Rodríguez', '1992-04-04', '2009-08-16', 1, 1, 4),
     ('Laura Fernández', '1997-05-05', '2010-10-19', 1, 1, 6);
+
 
 INSERT INTO Students (Name, DateOfBirth, EnrollmentDate, IsActive, HasGraduated, CareerId)
 VALUES
@@ -52,12 +70,16 @@ VALUES
     ('Sebastián Vila', '2002-08-20', '2022-04-03', 1, 0, 6);
 
 
-INSERT INTO Careers VALUES ('Ingeniería Informática',1);
+
+
+INSERT INTO Careers VALUES ('Medicina',15);
+
+select * from Careers
     
-    INSERT INTO Subjects VALUES ('Base de datos',2), ('Programación',2),('Gestión de las organizaciones',2);
+INSERT INTO Subjects VALUES ('Base de datos',2), ('Programación',2),('Gestión de las organizaciones',2);
 
 
-    select * from AttendanceRecords;
+select * from AttendanceRecords;
 
 
 INSERT INTO AttendanceRecords
@@ -81,3 +103,5 @@ VALUES
     ('2023-07-28', 1, 1, 1),
     ('2023-08-04', 1, 1, 1),
     ('2023-08-11', 1, 1, 1);
+
+

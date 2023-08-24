@@ -21,6 +21,54 @@ namespace DevExtAspNetReactProject.Controllers.api
             return Json(await DataSourceLoader.LoadAsync(_context.Careers, loadOptions));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> CareerAreas()
+        {
+            var result = await _context.Careers
+                .Where(c => c.ParentCareerId == null)
+                .ToListAsync();
+
+            return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> CareersCurrentStudents(int id)
+        {
+            var query =
+                from c in _context.Careers
+                join s in _context.Students on c.Id equals s.CareerId
+                where s.IsActive // no hace falta = 1
+                where c.ParentCareerId == id
+                group c by c.Title into g
+                select new
+                {
+                    Title = g.Key,
+                    Quantity = g.Count()
+                };
+
+            var result = await query.ToListAsync();
+
+            return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> CareersHistoricStudents(int id)
+        {
+            var query =
+                from c in _context.Careers
+                join s in _context.Students on c.Id equals s.CareerId
+                where c.ParentCareerId == id
+                group c by c.Title into g
+                select new
+                {
+                    Title = g.Key,
+                    Quantity = g.Count()
+                };
+
+            var result = await query.ToListAsync();
+
+            return Ok(result);
+        }
 
 
         [HttpDelete]
