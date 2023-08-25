@@ -22,7 +22,7 @@ namespace DevExtAspNetReactProject.Controllers.api
                 {
                     Id = c.Id.ToString(),
                     Text = c.Title,
-                    Items = c.Subjects
+                    Items = c.Subjects!
                         .Select(s => new SubjectViewModel
                         { Id = $"{c.Id}_{s.Id}", Text = s.Description, CareerId = s.CareerId })
                         .ToList()
@@ -36,16 +36,15 @@ namespace DevExtAspNetReactProject.Controllers.api
 
     public class CareerViewModel
     {
-        public string Id { get; set; }
-        public string Text { get; set; }
-        public List<SubjectViewModel> Items { get; set; }
+        public string Id { get; set; } = null!;
+        public string Text { get; set; } = null!;
+        public List<SubjectViewModel>? Items { get; set; }
     }
 
     public class SubjectViewModel
     {
-        public string Id { get; set; }
-        public string Text { get; set; }
-
+        public string Id { get; set; } = null!;
+        public string Text { get; set; } = null!;
         public int CareerId { get; set; }
     }
 
