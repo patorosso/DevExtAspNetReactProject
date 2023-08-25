@@ -6,6 +6,7 @@
         public string Title { get; set; } = null!;
         public int? ParentCareerId { get; set; }
         public Career? ParentCareer { get; set; }
+        public List<Subject>? Subjects { get; set; }
 
     }
 }

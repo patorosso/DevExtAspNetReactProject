@@ -48,7 +48,7 @@ namespace DevExtAspNetReactProject.Migrations
 
                     b.HasIndex("SubjectId");
 
-                    b.ToTable("AttendanceRecords");
+                    b.ToTable("AttendanceRecords", (string)null);
                 });
 
             modelBuilder.Entity("DevExtAspNetReactProject.Models.Career", b =>
@@ -70,7 +70,7 @@ namespace DevExtAspNetReactProject.Migrations
 
                     b.HasIndex("ParentCareerId");
 
-                    b.ToTable("Careers");
+                    b.ToTable("Careers", (string)null);
                 });
 
             modelBuilder.Entity("DevExtAspNetReactProject.Models.Student", b =>
@@ -104,7 +104,7 @@ namespace DevExtAspNetReactProject.Migrations
 
                     b.HasIndex("CareerId");
 
-                    b.ToTable("Students");
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("DevExtAspNetReactProject.Models.Subject", b =>
@@ -126,7 +126,7 @@ namespace DevExtAspNetReactProject.Migrations
 
                     b.HasIndex("CareerId");
 
-                    b.ToTable("Subjects");
+                    b.ToTable("Subjects", (string)null);
                 });
 
             modelBuilder.Entity("DevExtAspNetReactProject.Models.Attendance", b =>

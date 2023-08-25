@@ -4,34 +4,33 @@ import { endpoint } from "../utils/requestLogic";
 import TabPanel, { Item } from "devextreme-react/tab-panel";
 
 const Subjects = () => {
-  const [subjects, setSubjects] = useState([]);
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       try {
-  //         const response = await fetch(
-  //           `${endpoint}/Subjects/GetSubjectsTreeWithCareers`
-  //         );
+  const [careerAreas, setCareerAreas] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${endpoint}/Careers/CareerAreas`);
 
-  //         if (response.status !== 200 && response.status !== 204)
-  //           throw new Error(
-  //             `Error. Server responded with status: ${response.status}`
-  //           );
+        if (response.status !== 200 && response.status !== 204)
+          throw new Error(
+            `Error. Server responded with status: ${response.status}`
+          );
 
-  //         const subjectsFetched = await response.json();
-  //         setSubjects(subjectsFetched);
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     };
-  //     fetchData();
-  //   }, []);
+        const careerAreasFetched = await response.json();
+        setCareerAreas(careerAreasFetched);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
 
-  const [careersWithSubjects, setCareersWithSubjects] = useState([]);
+  const [selectedAreaId, setSelectedAreaId] = useState(1);
+  const [careerWithSubjects, setCareerWithSubjects] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${endpoint}/Subjects/GetCareerTreeWithSubjects`
+          `${endpoint}/Subjects/GetCareerTreeWithSubjects/${selectedAreaId}`
         );
 
         if (response.status !== 200 && response.status !== 204)
@@ -40,24 +39,31 @@ const Subjects = () => {
           );
 
         const careersWithSubjectsFetched = await response.json();
-        setCareersWithSubjects(careersWithSubjectsFetched);
+        setCareerWithSubjects(careersWithSubjectsFetched);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, []);
+  }, [selectedAreaId]);
+
+  const handleTitleClick = (e) => {
+    setSelectedAreaId(e.itemData.areaId);
+  };
 
   return (
     <React.Fragment>
-      <TabPanel height={600} noDataText="">
-        {careersWithSubjects.map((area) => (
-          <Item title={area.title} key={area.title}>
-            <TreeView
-              id="treeview"
-              width={300}
-              dataSource={careersWithSubjects}
-            />
+      <TabPanel height={350} noDataText="" onTitleClick={handleTitleClick}>
+        {careerAreas.map((area) => (
+          <Item title={area.title} key={area.id} areaId={area.id}>
+            {selectedAreaId !== null && (
+              <TreeView
+                id="treeview"
+                width={300}
+                dataSource={careerWithSubjects}
+                style={{ marginTop: 20, marginLeft: 20 }}
+              />
+            )}
           </Item>
         ))}
       </TabPanel>

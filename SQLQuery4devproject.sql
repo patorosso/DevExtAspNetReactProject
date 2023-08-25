@@ -12,6 +12,9 @@ select * from Careers c
 left join Subjects s on s.CareerId = c.Id
 
 
+select * from Careers c
+where c.ParentCareerId = 1
+
 
 insert into Careers values ('Ingeniería Industrial',1)
 
