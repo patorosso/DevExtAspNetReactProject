@@ -18,7 +18,7 @@ where c.ParentCareerId = 1
 
 insert into Careers values ('Ingeniería Industrial',1)
 
-delete from AttendanceRecords
+select * from AttendanceRecords
 
 select * from Students
 
@@ -78,34 +78,99 @@ VALUES
 
 INSERT INTO Careers VALUES ('Medicina',15);
 
-select * from Careers
+select * from Students
     
 INSERT INTO Subjects VALUES ('Base de datos',2), ('Programación',2),('Gestión de las organizaciones',2);
 
 
 select * from AttendanceRecords;
 
+select count(*) as cant from AttendanceRecords
+where AttendanceDate = '2023-04-07'
 
-INSERT INTO AttendanceRecords
+
+
+
+
+
+
+
+INSERT INTO AttendanceRecords (AttendanceDate, StudentId, SubjectId, HasAttended)
 VALUES
-    ('2023-04-07', 1, 1, 1),
-    ('2023-04-14', 1, 1, 1),
-    ('2023-04-21', 1, 1, 0),
-    ('2023-04-28', 1, 1, 1),
-    ('2023-05-05', 1, 1, 1),
-    ('2023-05-12', 1, 1, 0),
-    ('2023-05-19', 1, 1, 1),
-    ('2023-05-26', 1, 1, 1),
-    ('2023-06-02', 1, 1, 0),
-    ('2023-06-09', 1, 1, 0),
-    ('2023-06-16', 1, 1, 1),
-    ('2023-06-23', 1, 1, 1),
-    ('2023-06-30', 1, 1, 1),
-    ('2023-07-07', 1, 1, 1),
-    ('2023-07-14', 1, 1, 1),
-    ('2023-07-21', 1, 1, 1),
-    ('2023-07-28', 1, 1, 1),
-    ('2023-08-04', 1, 1, 1),
-    ('2023-08-11', 1, 1, 1);
+    ('2023-04-07', 14, 1, 1),
+    ('2023-04-14', 14, 1, 1),
+    ('2023-04-21', 14, 1, 0),
+    ('2023-04-28', 14, 1, 1),
+    ('2023-05-05', 14, 1, 1),
+    ('2023-05-12', 14, 1, 0),
+    ('2023-05-19', 14, 1, 1),
+    ('2023-05-26', 14, 1, 1),
+    ('2023-06-02', 14, 1, 0),
+    ('2023-06-09', 14, 1, 0),
+    ('2023-06-16', 14, 1, 1),
+    ('2023-06-23', 14, 1, 1),
+    ('2023-06-30', 14, 1, 1),
+    ('2023-07-07', 14, 1, 1),
+    ('2023-07-14', 14, 1, 1),
+    ('2023-07-21', 14, 1, 1),
+    ('2023-07-28', 14, 1, 1);
+GO;
+BEGIN TRANSACTION;
+-- Create a temporary table to hold the dates
+CREATE TABLE #DateRange (AttendanceDate DATE);
+
+insert into #DateRange values
+    ('2023-04-07'),
+    ('2023-04-14'),
+    ('2023-04-21'),
+    ('2023-04-28'),
+    ('2023-05-05'),
+    ('2023-05-12'),
+    ('2023-05-19'),
+    ('2023-05-26'),
+    ('2023-06-02'),
+    ('2023-06-09'),
+    ('2023-06-16'),
+    ('2023-06-23'),
+    ('2023-06-30'),
+    ('2023-07-07'),
+    ('2023-07-14'),
+    ('2023-07-21'),
+    ('2023-07-28');
+                 
+-- Insert all dates within the range into the temporary table
+
+
+-- Insert attendance records for students 15 to 64 using a loop
+DECLARE @StudentId INT = 15;
+
+WHILE @StudentId <= 64
+BEGIN
+    INSERT INTO AttendanceRecords (AttendanceDate, StudentId, SubjectId, HasAttended)
+    SELECT 
+        d.AttendanceDate,
+        @StudentId AS StudentId,
+        1 AS SubjectId,
+        CAST(CAST(CRYPT_GEN_RANDOM(1) AS int)%2 AS BIT)
+ AS HasAttended
+    FROM #DateRange d;
+    
+    SET @StudentId = @StudentId + 1;
+END;
+
+-- Clean up: drop the temporary table
+DROP TABLE #DateRange;
+
+--commit;
+rollback;
+
+delete from AttendanceRecords where Id = 22;
+
+select StudentId, count(StudentId) from AttendanceRecords
+where HasAttended = 0
+and AttendanceDate BETWEEN '2023-04-07' AND '2023-07-28'
+group by StudentId
+order by StudentId;
+
 
 
