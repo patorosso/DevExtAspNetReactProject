@@ -1,4 +1,4 @@
-select * from Careers
+select * from Subjects
 
 delete from Careers where Id = 9
 
@@ -8,7 +8,8 @@ update Careers
 set ParentCareerId = 11
 where Id = 12
 
-select * from Careers
+select * from Careers c
+left join Subjects s on s.CareerId = c.Id
 
 
 

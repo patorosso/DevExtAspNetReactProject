@@ -1,6 +1,7 @@
 import Home from "./pages/Home";
 import Students from "./pages/Students";
 import Careers from "./pages/Careers";
+import Subjects from "./pages/Subjects";
 
 const AppRoutes = [
   {
@@ -14,6 +15,10 @@ const AppRoutes = [
   {
     path: "/careers",
     element: <Careers />,
+  },
+  {
+    path: "/subjects",
+    element: <Subjects />,
   },
 ];
 
