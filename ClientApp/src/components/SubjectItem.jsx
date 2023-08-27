@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   Chart,
   Series,
@@ -7,20 +7,35 @@ import {
   CommonSeriesSettings,
   CommonAxisSettings,
   Grid,
-  Export,
   Legend,
   Margin,
   Tooltip,
   Label,
   Format,
 } from "devextreme-react/chart";
+import { TreeView } from "devextreme-react/tree-view";
 import DropDownButton from "devextreme-react/drop-down-button";
 import { endpoint, getParamsForChart } from "../utils/requestLogic";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
 
-const ChartComponent = () => {
+const SubjectItem = ({ treeDataSource }) => {
+  const idRef = useRef("1");
+  const yearRef = useRef(2023);
   const valuesChart = [{ value: "quantity", name: "Cantidad" }];
+
+  const handleItemClick = (e) => {
+    if (e.itemData.id && !e.itemData.id.includes("_")) return;
+
+    //console.log(idRef.current, e.itemData.id);
+    const idParts = e.itemData.id.split("_");
+    const subjectId = idParts[idParts.length - 1];
+
+    if (idRef.current === subjectId) return;
+
+    idRef.current = subjectId;
+    chartDataSource.reload();
+  };
 
   const chartStore = new CustomStore({
     key: "id",
@@ -76,57 +91,38 @@ const ChartComponent = () => {
   });
 
   const handleButtonClick = (e) => {
-    if (yearRef.current == e.itemData.year) return;
+    if (yearRef.current === e.itemData.year) return;
 
     yearRef.current = e.itemData.year;
     chartDataSource.reload();
   };
 
+  console.log("child render");
   return (
     <React.Fragment>
-      <Chart
-        palette="Violet"
-        dataSource={chartDataSource}
-        title={`Asistencia de estudiantes en ${yearRef.current}`}
-        style={{ marginTop: 20, marginLeft: 20, padding: 5 }}
-        size={{
-          height: 400,
-          width: 1000,
-        }}
-      >
-        <CommonSeriesSettings argumentField="attendanceDate" />
-        <CommonAxisSettings>
-          <Grid visible={true} />
-        </CommonAxisSettings>
-        {valuesChart.map((item) => (
-          <Series key={item.value} valueField={item.value} name={item.name} />
-        ))}
-        <Margin bottom={20} />
-        <ArgumentAxis allowDecimals={false} axisDivisionFactor={10}>
-          <Label>
-            <Format type="decimal" />
-          </Label>
-        </ArgumentAxis>
-        <ValueAxis
-          name="qty"
-          position="left"
-          tickInterval={20}
-          showZero={true}
+      <div style={{ display: "flex" }}>
+        <TreeView
+          id="treeview"
+          width={300}
+          dataSource={treeDataSource}
+          style={{ marginTop: 70, marginLeft: 20 }}
+          onItemClick={handleItemClick}
         />
-        <Legend verticalAlignment="top" horizontalAlignment="right" />
-        <Export enabled={true} />
-        <Tooltip enabled={true} />
-      </Chart>
-      <DropDownButton
-        text="Selección año"
-        icon="date"
-        dataSource={dropdownStore}
-        onItemClick={handleButtonClick}
-        displayExpr="year"
-        keyExpr="id"
-      />
+
+        <div>
+          <DropDownButton
+            text="Selección año"
+            icon="menu"
+            dataSource={dropdownStore}
+            onItemClick={handleButtonClick}
+            displayExpr="year"
+            keyExpr="id"
+            style={{ marginLeft: 20 }}
+          />
+        </div>
+      </div>
     </React.Fragment>
   );
 };
 
-export default ChartComponent;
+export default SubjectItem;

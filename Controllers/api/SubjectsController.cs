@@ -58,6 +58,7 @@ namespace DevExtAspNetReactProject.Controllers.api
                 {
                     Id = c.Id.ToString(),
                     Text = c.Title,
+                    Expanded = c.Title.Contains("Informática"),
                     Items = c.Subjects!
                         .Select(s => new SubjectViewModel
                         { Id = $"{c.Id}_{s.Id}", Text = s.Description, CareerId = s.CareerId })
@@ -74,6 +75,7 @@ namespace DevExtAspNetReactProject.Controllers.api
         public string Id { get; set; } = null!;
         public string Text { get; set; } = null!;
         public List<SubjectViewModel>? Items { get; set; }
+        public bool Expanded { get; set; }
     }
 
     public class SubjectViewModel
