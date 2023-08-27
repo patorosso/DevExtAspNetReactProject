@@ -1,39 +1,26 @@
-import React, { useRef } from "react";
-import {
-  Chart,
-  Series,
-  ArgumentAxis,
-  ValueAxis,
-  CommonSeriesSettings,
-  CommonAxisSettings,
-  Grid,
-  Legend,
-  Margin,
-  Tooltip,
-  Label,
-  Format,
-} from "devextreme-react/chart";
+import React, { useRef, useState } from "react";
 import { TreeView } from "devextreme-react/tree-view";
-import DropDownButton from "devextreme-react/drop-down-button";
+//import DropDownButton from "devextreme-react/drop-down-button";
 import { endpoint, getParamsForChart } from "../utils/requestLogic";
 import CustomStore from "devextreme/data/custom_store";
 import DataSource from "devextreme/data/data_source";
+import SplineChartCustom from "./SplineChartCustom";
+import BarChartCustom from "./BarChartCustom";
 
 const SubjectItem = ({ treeDataSource }) => {
-  const idRef = useRef("1");
-  const yearRef = useRef(2023);
-  const valuesChart = [{ value: "quantity", name: "Cantidad" }];
+  const idRef = useRef(null);
+  //const yearRef = useRef(2023);
 
   const handleItemClick = (e) => {
     if (e.itemData.id && !e.itemData.id.includes("_")) return;
 
-    //console.log(idRef.current, e.itemData.id);
     const idParts = e.itemData.id.split("_");
     const subjectId = idParts[idParts.length - 1];
 
     if (idRef.current === subjectId) return;
 
     idRef.current = subjectId;
+    barChartDataSource.reload();
     chartDataSource.reload();
   };
 
@@ -64,15 +51,15 @@ const SubjectItem = ({ treeDataSource }) => {
 
   const chartDataSource = new DataSource({
     store: chartStore,
-    filter: ["Year", "=", yearRef.current],
+    //filter: ["Year", "=", yearRef.current],
   });
 
-  const dropdownStore = new CustomStore({
+  const barChartStore = new CustomStore({
     key: "id",
-    load: async () => {
+    load: async (loadOptions) => {
       try {
         const response = await fetch(
-          `${endpoint}/Subjects/GetSubjectsAttendanceYearById/${idRef.current}`
+          `${endpoint}/Subjects/GetTotalAndExpectedAttendanceById/${idRef.current}`
         );
 
         if (response.status !== 200 && response.status !== 204)
@@ -80,24 +67,18 @@ const SubjectItem = ({ treeDataSource }) => {
             `Error. Server responded with status: ${response.status}`
           );
 
-        const subjectsAttendanceYear = await response.json();
-        return {
-          data: subjectsAttendanceYear,
-        };
+        const subjectsAttendance = await response.json();
+        return subjectsAttendance;
       } catch (error) {
         console.log(error);
       }
     },
   });
 
-  const handleButtonClick = (e) => {
-    if (yearRef.current === e.itemData.year) return;
+  const barChartDataSource = new DataSource({
+    store: barChartStore,
+  });
 
-    yearRef.current = e.itemData.year;
-    chartDataSource.reload();
-  };
-
-  console.log("child render");
   return (
     <React.Fragment>
       <div style={{ display: "flex" }}>
@@ -108,19 +89,9 @@ const SubjectItem = ({ treeDataSource }) => {
           style={{ marginTop: 70, marginLeft: 20 }}
           onItemClick={handleItemClick}
         />
-
-        <div>
-          <DropDownButton
-            text="Selección año"
-            icon="menu"
-            dataSource={dropdownStore}
-            onItemClick={handleButtonClick}
-            displayExpr="year"
-            keyExpr="id"
-            style={{ marginLeft: 20 }}
-          />
-        </div>
+        <SplineChartCustom chartDataSource={chartDataSource} />
       </div>
+      <BarChartCustom barChartDataSource={barChartDataSource} />
     </React.Fragment>
   );
 };

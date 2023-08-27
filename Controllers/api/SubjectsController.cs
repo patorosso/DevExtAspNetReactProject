@@ -68,7 +68,37 @@ namespace DevExtAspNetReactProject.Controllers.api
             return Ok(careersWithSubjectsList);
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTotalAndExpectedAttendanceById(int id)
+        {
+            var result = await _context.AttendanceRecords
+                .Where(a => a.SubjectId == id)
+                .GroupBy(a => new { Month = a.AttendanceDate.Month })
+                .Select(g => new
+                {
+                    Id = g.Key.Month,
+                    TotalAttendance = g.Sum(a => a.HasAttended ? 1 : 0),
+                    ExpectedAttendance = g.Count(),
+                })
+                .OrderBy(a => a.Id)
+                .Join(
+                    _context.MonthName,
+                    attendance => attendance.Id,
+                    month => month.Id,
+                    (attendance, month) => new
+                    {
+                        MonthName = month.MonthName,
+                        attendance.TotalAttendance,
+                        attendance.ExpectedAttendance,
+                    }
+                )
+                .ToListAsync();
+
+            return Ok(result);
+        }
+
     }
+
 
     public class CareerViewModel
     {

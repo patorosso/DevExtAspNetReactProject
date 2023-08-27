@@ -10,6 +10,7 @@ namespace DevExtAspNetReactProject.Models
         public DbSet<Career> Careers { get; set; }
         public DbSet<Attendance> AttendanceRecords { get; set; }
         public DbSet<Subject> Subjects { get; set; }
+        public DbSet<Month> MonthName { get; set; }
 
     }
 

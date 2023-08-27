@@ -68,7 +68,7 @@ const Subjects = () => {
   return (
     <React.Fragment>
       <TabPanel
-        height={750}
+        height={850}
         dataSource={tabStore}
         onTitleClick={handleTitleClick}
         // causaba doble renderizado inline function

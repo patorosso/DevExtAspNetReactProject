@@ -76,11 +76,11 @@ VALUES
 
 
 
-INSERT INTO Careers VALUES ('Medicina',15);
+select * from Careers
 
 select * from Subjects
     
-INSERT INTO Subjects VALUES ('Base de datos',2), ('Programación',2),('Gestión de las organizaciones',2);
+INSERT INTO Subjects VALUES ('Economía',6), ('Física',6);
 
 
 select count(*) as cant from AttendanceRecords
@@ -118,23 +118,23 @@ BEGIN TRANSACTION;
 CREATE TABLE #DateRange (AttendanceDate DATE);
 
 insert into #DateRange values
-    ('2023-04-07'),
-    ('2023-04-14'),
-    ('2023-04-21'),
-    ('2023-04-28'),
-    ('2023-05-05'),
-    ('2023-05-12'),
-    ('2023-05-19'),
-    ('2023-05-26'),
-    ('2023-06-02'),
-    ('2023-06-09'),
-    ('2023-06-16'),
-    ('2023-06-23'),
-    ('2023-06-30'),
-    ('2023-07-07'),
-    ('2023-07-14'),
-    ('2023-07-21'),
-    ('2023-07-28');
+    ('2022-04-07'),
+    ('2022-04-14'),
+    ('2022-04-21'),
+    ('2022-04-28'),
+    ('2022-05-05'),
+    ('2022-05-12'),
+    ('2022-05-19'),
+    ('2022-05-26'),
+    ('2022-06-02'),
+    ('2022-06-09'),
+    ('2022-06-16'),
+    ('2022-06-23'),
+    ('2022-06-30'),
+    ('2022-07-07'),
+    ('2022-07-14'),
+    ('2022-07-21'),
+    ('2022-07-28');
                  
 -- Insert all dates within the range into the temporary table
 
@@ -148,7 +148,7 @@ BEGIN
     SELECT 
         d.AttendanceDate,
         @StudentId AS StudentId,
-        3 AS SubjectId,
+        1 AS SubjectId,
         CASE 
             WHEN CAST(CAST(CRYPT_GEN_RANDOM(1) AS INT) % 100 AS FLOAT) / 100 <= 0.90 THEN 1
             ELSE 0
@@ -180,6 +180,22 @@ where SubjectId = 1 and HasAttended = 1
 group by AttendanceDate
 order by AttendanceDate
 
-select AttendanceDate from AttendanceRecords
-where SubjectId = 1
-group by AttendanceDate
+
+
+begin transaction
+delete from AttendanceRecords where Id >= 8677
+
+select * from AttendanceRecords
+
+
+
+
+SELECT
+    DATEPART(MONTH, AttendanceDate) AS Month,
+    SUM(CASE WHEN HasAttended = 1 THEN 1 ELSE 0 END) AS TotalAttendance,
+    COUNT(HasAttended) AS ExpectedAttendance
+FROM AttendanceRecords as a
+WHERE SubjectId = 1
+GROUP BY DATEPART(MONTH, AttendanceDate)
+ORDER BY Month;
+

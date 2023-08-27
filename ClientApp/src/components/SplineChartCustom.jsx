@@ -1,12 +1,27 @@
 import React from "react";
+import {
+  Chart,
+  Series,
+  ArgumentAxis,
+  ValueAxis,
+  CommonSeriesSettings,
+  CommonAxisSettings,
+  Grid,
+  Legend,
+  Margin,
+  Tooltip,
+  Label,
+  Format,
+} from "devextreme-react/chart";
 
-const SplineChartCustom = () => {
+const SplineChartCustom = ({ chartDataSource }) => {
+  const valuesChart = [{ value: "quantity", name: "Cantidad" }];
   return (
     <React.Fragment>
       <Chart
         palette="Violet"
         dataSource={chartDataSource}
-        title={`Asistencia de estudiantes en ${yearRef.current}`}
+        title={`Asistencia`}
         style={{ marginTop: 20, marginLeft: 20, padding: 5 }}
         size={{
           height: 400,
