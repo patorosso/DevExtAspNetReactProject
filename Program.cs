@@ -1,4 +1,4 @@
-using DevExtAspNetReactProject.Models;
+﻿using DevExtAspNetReactProject.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

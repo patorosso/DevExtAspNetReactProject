@@ -5,6 +5,7 @@ import DataGrid, {
   Pager,
   Editing,
   Lookup,
+  FilterRow,
 } from "devextreme-react/data-grid";
 import { endpoint, getParams } from "../utils/requestLogic";
 import { createStore } from "devextreme-aspnet-data-nojquery";
@@ -111,6 +112,7 @@ const Students = () => {
   return (
     <React.Fragment>
       <DataGrid dataSource={store} showBorders={true} remoteOperations={true}>
+        <FilterRow visible={true} />
         <Editing
           mode="row"
           allowAdding={true}

@@ -23,3 +23,13 @@ export function getParams(loadOptions) {
   });
   return params.slice(0, -1);
 }
+
+export function getParamsForChart(loadOptions) {
+  let params = "?";
+  ["filter"].forEach((i) => {
+    if (i in loadOptions && isNotEmpty(loadOptions[i])) {
+      params += `${i}=${JSON.stringify(loadOptions[i])}&`;
+    }
+  });
+  return params.slice(0, -1);
+}

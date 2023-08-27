@@ -37,7 +37,7 @@ export class NavMenu extends Component {
           light
         >
           <NavbarBrand tag={Link} to="/">
-            DevExtAspNetReactProject
+            UNLaM Analytics
           </NavbarBrand>
           <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
           <Collapse
@@ -53,17 +53,17 @@ export class NavMenu extends Component {
               </NavItem>
               <NavItem>
                 <NavLink tag={Link} className="text-dark" to="/students">
-                  Students
+                  Estudiantes
                 </NavLink>
               </NavItem>
               <NavItem>
                 <NavLink tag={Link} className="text-dark" to="/careers">
-                  Careers
+                  Académicas
                 </NavLink>
               </NavItem>
               <NavItem>
                 <NavLink tag={Link} className="text-dark" to="/subjects">
-                  Subjects
+                  Materias
                 </NavLink>
               </NavItem>
             </ul>

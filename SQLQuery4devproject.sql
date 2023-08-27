@@ -78,12 +78,10 @@ VALUES
 
 INSERT INTO Careers VALUES ('Medicina',15);
 
-select * from Students
+select * from Subjects
     
 INSERT INTO Subjects VALUES ('Base de datos',2), ('Programación',2),('Gestión de las organizaciones',2);
 
-
-select * from AttendanceRecords;
 
 select count(*) as cant from AttendanceRecords
 where AttendanceDate = '2023-04-07'
@@ -142,21 +140,24 @@ insert into #DateRange values
 
 
 -- Insert attendance records for students 15 to 64 using a loop
-DECLARE @StudentId INT = 15;
+DECLARE @StudentId INT = 1149;
 
-WHILE @StudentId <= 64
+WHILE @StudentId <= 1200
 BEGIN
     INSERT INTO AttendanceRecords (AttendanceDate, StudentId, SubjectId, HasAttended)
     SELECT 
         d.AttendanceDate,
         @StudentId AS StudentId,
-        1 AS SubjectId,
-        CAST(CAST(CRYPT_GEN_RANDOM(1) AS int)%2 AS BIT)
- AS HasAttended
+        3 AS SubjectId,
+        CASE 
+            WHEN CAST(CAST(CRYPT_GEN_RANDOM(1) AS INT) % 100 AS FLOAT) / 100 <= 0.90 THEN 1
+            ELSE 0
+        END AS HasAttended
     FROM #DateRange d;
     
     SET @StudentId = @StudentId + 1;
 END;
+
 
 -- Clean up: drop the temporary table
 DROP TABLE #DateRange;
@@ -168,9 +169,17 @@ delete from AttendanceRecords where Id = 22;
 
 select StudentId, count(StudentId) from AttendanceRecords
 where HasAttended = 0
+and SubjectId = 3
 and AttendanceDate BETWEEN '2023-04-07' AND '2023-07-28'
 group by StudentId
 order by StudentId;
 
 
+select AttendanceDate, count(HasAttended) as Qty from AttendanceRecords
+where SubjectId = 1 and HasAttended = 1
+group by AttendanceDate
+order by AttendanceDate
 
+select AttendanceDate from AttendanceRecords
+where SubjectId = 1
+group by AttendanceDate
